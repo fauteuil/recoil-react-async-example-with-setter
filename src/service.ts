@@ -7,6 +7,7 @@ export async function getUsers() {
   // console.log("userApiUrl", userApiUrl);
   try {
     const response = await axios.get<UserApiData>(userApiUrl);
+    console.log("getUsers response: ", response?.data?.data);
     return response.data || [];
   } catch (error) {
     throw new Error(

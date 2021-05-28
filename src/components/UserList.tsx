@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilStateLoadable } from "recoil";
 import { UserListView } from "./UserListView";
 import { selectedUserState, userListState } from "../state";
 import { User } from "../types";
-import { defaultUser } from "../configuration";
+import { defaultBlankUser } from "../configuration";
 
 export function UserList() {
   const [usersData, setUserState] = useRecoilStateLoadable(userListState);
@@ -12,7 +12,7 @@ export function UserList() {
   const handleUserClick = (user: User) => (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    const selectedUser = user || defaultUser;
+    const selectedUser = user || defaultBlankUser;
     console.log("handleUserClick", selectedUser);
     setSelectedUser(selectedUser);
   };

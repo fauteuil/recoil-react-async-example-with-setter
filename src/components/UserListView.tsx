@@ -13,7 +13,7 @@ export const UserListView: FC<UserListProps> = (props) => {
   return (
     <div>
       {users.map((user, index) => (
-        <div key={index} onClick={handleUserClick(user)}>
+        <div key={user.id} onClick={handleUserClick(user)}>
           {`${user.last_name}, ${user.first_name}` || "no name..."}
         </div>
       ))}

@@ -1,41 +1,60 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilStateLoadable } from "recoil";
+import { useRecoilState, useRecoilStateLoadable, useRecoilValue } from "recoil";
 import { UserListView } from "./UserListView";
 import { selectedUserState, userListState } from "../state";
 import { User } from "../types";
-import { defaultUser } from "../configuration";
+import { defaultBlankUser } from "../configuration";
 
 export function UpdateUserInput() {
   // Application state
-  const [usersData, setUserState] = useRecoilStateLoadable(userListState);
-  const userList = usersData.state === "hasValue" ? usersData.contents : null;
+  const [userListData, setUserListState] = useRecoilStateLoadable(
+    userListState
+  );
+  const userList =
+    userListData.state === "hasValue" ? userListData.contents : null;
   const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
 
   // local state
-  const [newUser, setNewUser] = useState<User>(defaultUser);
+  const [updatedUser, setUpdatedUser] = useState<User>(selectedUser);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewUser({
-      first_name: `${event.target.value}`,
-      last_name: "Surname",
-      email: "a.new@email.addr"
-    });
+    event.preventDefault();
+    setUpdatedUser({ ...selectedUser, first_name: `${event.target.value}` });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-TODO: ADD UPDATE LOGIC HERE
+    if (selectedUser?.first_name && userList) {
+      //Find and update the updated user in the app state.
+      const targetUserIndex = userList.findIndex(
+        (item) => item.id === selectedUser.id
+      );
 
-    // if (newUser?.first_name && userList) {
-    //   setUserState([...userList, newUser]);
-    //   setNewUser(defaultUser);
-    // }
+      // Update only if an index was found.
+      if (targetUserIndex >= 0) {
+        // Update the app state list
+        // by splicing in the updated item
+        // to a copy of the original, immutable array.
+        const arrayToUpdate = [...userList];
+        arrayToUpdate.splice(targetUserIndex, 1, updatedUser);
+        setUserListState(arrayToUpdate);
+
+        // Reset the local state newUser to be blank.
+        setSelectedUser(defaultBlankUser);
+        // Reset the app state selected user to be blank.
+        setUpdatedUser(defaultBlankUser);
+      }
+    }
   };
+
+  // We want the input to show the selected user by default,
+  // unless there is an updatedUser in local state.
+  const currentInputValue = updatedUser.first_name || selectedUser.first_name;
 
   return (
     <div>
-      <input onChange={handleInputChange} value={selectedUser.first_name} />
+      <input onChange={handleInputChange} value={currentInputValue} />
       <button onClick={handleButtonClick}>Update User</button>
     </div>
   );

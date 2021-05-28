@@ -11,4 +11,13 @@ export const getUserApiUrl = () =>
     Math.round(Math.random()) * 2
   )}`;
 
-export const defaultUser: User = { first_name: "", last_name: "", email: "" };
+export const defaultBlankUser: User = {
+  first_name: "",
+  last_name: "",
+  email: ""
+};
+export const defaultNewUser: User = {
+  first_name: "",
+  last_name: "oops",
+  email: "oopsie@whoops.oops"
+};

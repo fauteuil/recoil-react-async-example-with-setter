@@ -3,29 +3,36 @@ import { useRecoilState, useRecoilStateLoadable } from "recoil";
 import { UserListView } from "./UserListView";
 import { selectedUserState, userListState } from "../state";
 import { User } from "../types";
-import { defaultUser } from "../configuration";
+import { defaultBlankUser, defaultNewUser } from "../configuration";
 
 export function AddUserInput() {
   // Application state
-  const [usersData, setUserState] = useRecoilStateLoadable(userListState);
-  const userList = usersData.state === "hasValue" ? usersData.contents : null;
+  const [userListData, setUseListState] = useRecoilStateLoadable(userListState);
+  const userList =
+    userListData.state === "hasValue" ? userListData.contents : null;
 
   // local state
-  const [newUser, setNewUser] = useState<User>(defaultUser);
+  const newUserEmpty = { ...defaultNewUser, id: new Date().getTime() };
 
+  const [newUser, setNewUser] = useState<User>(newUserEmpty);
+
+  /**
+   * Update the newUser's `first_name`.
+   * @param event
+   */
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewUser({
-      first_name: `${event.target.value}`,
-      last_name: "Surname",
-      email: "a.new@email.addr"
-    });
+    setNewUser({ ...newUser, first_name: `${event.target.value}` });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    console.log("newUser", newUser);
     if (newUser?.first_name && userList) {
-      setUserState([...userList, newUser]);
-      setNewUser(defaultUser);
+      // Update the app state user list.
+      setUseListState([...userList, newUser]);
+
+      // Reset the loca state newUser to be blank.
+      setNewUser(defaultBlankUser);
     }
   };
 
