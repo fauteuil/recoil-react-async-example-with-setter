@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilStateLoadable, useRecoilValue } from "recoil";
-import { UserListView } from "./UserListView";
-import { selectedUserState, userListState } from "../state";
+import {
+  useRecoilState,
+  useRecoilStateLoadable,
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState
+} from "recoil";
+import { selectedUserState, updateUserState, userListState } from "../state";
 import { User } from "../types";
 import { defaultBlankUser } from "../configuration";
 
 export function UpdateUserInput() {
   // Application state
-  const [userListData, setUserListState] = useRecoilStateLoadable(
-    userListState
-  );
+  const userListLoadable = useRecoilValueLoadable(userListState);
   const userList =
-    userListData.state === "hasValue" ? userListData.contents : null;
+    userListLoadable.state === "hasValue" ? userListLoadable.contents : null;
   const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
+
+  // We only use the setter for updateUserState.
+  const updateUser = useSetRecoilState(updateUserState);
 
   // local state
   const [updatedUser, setUpdatedUser] = useState<User>(selectedUser);
@@ -24,27 +30,15 @@ export function UpdateUserInput() {
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    // console.log("updatedUser", updatedUser);
+    if (updatedUser?.first_name && userList) {
+      // Call the app state selector which will make a service call
+      // to update the user and splice it into the list.
+      // createUser(newUser);
+      updateUser(updatedUser);
 
-    if (selectedUser?.first_name && userList) {
-      //Find and update the updated user in the app state.
-      const targetUserIndex = userList.findIndex(
-        (item) => item.id === selectedUser.id
-      );
-
-      // Update only if an index was found.
-      if (targetUserIndex >= 0) {
-        // Update the app state list
-        // by splicing in the updated item
-        // to a copy of the original, immutable array.
-        const arrayToUpdate = [...userList];
-        arrayToUpdate.splice(targetUserIndex, 1, updatedUser);
-        setUserListState(arrayToUpdate);
-
-        // Reset the local state newUser to be blank.
-        setSelectedUser(defaultBlankUser);
-        // Reset the app state selected user to be blank.
-        setUpdatedUser(defaultBlankUser);
-      }
+      // Reset the local state newUser to be blank.
+      setUpdatedUser(defaultBlankUser);
     }
   };
 

@@ -13,7 +13,9 @@ export default function App() {
         <hr />
         <h3>User List</h3>
         <UserList />
+        <br />
         <AddUserInput />
+        <br />
         <UpdateUserInput />
       </div>
     </RecoilRoot>

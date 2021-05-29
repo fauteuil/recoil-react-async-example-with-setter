@@ -1,13 +1,18 @@
 import React from "react";
-import { useRecoilState, useRecoilStateLoadable } from "recoil";
+import {
+  useRecoilState,
+  useRecoilStateLoadable,
+  useRecoilValueLoadable,
+  useSetRecoilState
+} from "recoil";
 import { UserListView } from "./UserListView";
 import { selectedUserState, userListState } from "../state";
 import { User } from "../types";
 import { defaultBlankUser } from "../configuration";
 
 export function UserList() {
-  const [usersData, setUserState] = useRecoilStateLoadable(userListState);
-  const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
+  const userList = useRecoilValueLoadable(userListState);
+  const setSelectedUser = useSetRecoilState(selectedUserState);
 
   const handleUserClick = (user: User) => (
     event: React.MouseEvent<HTMLElement, MouseEvent>
@@ -17,19 +22,19 @@ export function UserList() {
     setSelectedUser(selectedUser);
   };
 
-  if (usersData.state === "hasError") {
+  if (userList.state === "hasError") {
     return <div> There is some problem! </div>;
   }
 
-  if (usersData.state === "loading") {
+  if (userList.state === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (usersData.state === "hasValue") {
+  if (userList.state === "hasValue") {
     return (
       <>
         <UserListView
-          users={usersData.contents}
+          users={userList.contents}
           handleUserClick={handleUserClick}
         />
       </>
