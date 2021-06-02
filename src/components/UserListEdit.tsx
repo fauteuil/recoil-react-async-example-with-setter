@@ -1,24 +1,19 @@
 import React from "react";
-import {
-  useRecoilState,
-  useRecoilStateLoadable,
-  useRecoilValueLoadable,
-  useSetRecoilState
-} from "recoil";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { UserListView } from "./UserListView";
-import { selectedUserState, userListState } from "../state";
+import { selectedUserState, userListStateEdit } from "../state";
 import { User } from "../types";
 import { defaultBlankUser } from "../configuration";
 
-export function UserList() {
-  const userList = useRecoilValueLoadable(userListState);
+export function UserListEdit() {
+  const userList = useRecoilValueLoadable(userListStateEdit);
   const setSelectedUser = useSetRecoilState(selectedUserState);
 
   const handleUserClick = (user: User) => (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     const selectedUser = user || defaultBlankUser;
-    console.log("handleUserClick", selectedUser);
+    // console.log("handleUserClick", selectedUser);
     setSelectedUser(selectedUser);
   };
 
@@ -34,6 +29,7 @@ export function UserList() {
     return (
       <>
         <UserListView
+          edit
           users={userList.contents}
           handleUserClick={handleUserClick}
         />
