@@ -34,8 +34,26 @@ export default function App() {
   return (
     <RecoilRoot>
       <div className="App">
-        <h1>Dynamic React Application State</h1>
-        <h2>with Recoil / TypeScript</h2>
+        <div
+          style={{
+            backgroundImage:
+              "url(https://miro.medium.com/max/4884/1*5ZuyTCsv84gs0MeoeF0OIA.png)",
+            backgroundRepeat: "no-repeat",
+            backgroundPositionX: "center",
+            color: "white",
+            padding: "0.5rem",
+            textShadow: "2px 3px black"
+          }}
+        >
+          <h1>Dynamic React Application State</h1>
+          <h2
+            style={{
+              color: "lightgrey"
+            }}
+          >
+            with Recoil / TypeScript
+          </h2>
+        </div>
         <hr />
         <h3>User List</h3>
 

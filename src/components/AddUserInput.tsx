@@ -25,7 +25,6 @@ export function AddUserInput() {
     ({ set }) => async ({ user }) => {
       try {
         const response = await mockCreateUser(user);
-        // console.log("addUser calling mockCreateUser() - response:", response);
 
         // Set the client-facing atom with our updated list.
         // NOTE: This assumes the service call returns the updated list.

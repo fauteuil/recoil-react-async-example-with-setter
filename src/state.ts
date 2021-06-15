@@ -14,10 +14,6 @@ export const selectedUserState = atom<User>({
 export const userServiceRequestState = selector<User[]>({
   key: "userServiceRequestState",
   get: async ({ get }) => {
-    // Referencing another state element (atom) creates a dependency:
-    // Any change to the value of `selectedUserIdState` will cause
-    // the service request to be made again.
-    // const selectedUserId = get(selectedUserState);
     try {
       const response = await getUsers();
       return response.data || [];
@@ -28,11 +24,13 @@ export const userServiceRequestState = selector<User[]>({
   }
 });
 
+// This atom is used by components to get and set app data.
 export const userListStateAdd = atom<User[]>({
   key: "userListStateAdd",
   default: userServiceRequestState
 });
 
+// This atom is used by components to get and set app data.
 export const userListStateEdit = atom<User[]>({
   key: "userListStateEdit",
   default: userServiceRequestState

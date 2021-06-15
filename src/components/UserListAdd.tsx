@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  useRecoilState,
-  useRecoilStateLoadable,
-  useRecoilValueLoadable,
-  useSetRecoilState
-} from "recoil";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { UserListView } from "./UserListView";
-import { selectedUserState, userListState, userListStateAdd } from "../state";
+import { selectedUserState, userListStateAdd } from "../state";
 import { User } from "../types";
 import { defaultBlankUser } from "../configuration";
 
@@ -18,7 +13,6 @@ export function UserListAdd() {
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     const selectedUser = user || defaultBlankUser;
-    // console.log("handleUserClick", selectedUser);
     setSelectedUser(selectedUser);
   };
 
