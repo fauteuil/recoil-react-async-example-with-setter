@@ -21,7 +21,9 @@ export function UpdateUserInput() {
   // Local state
   const [updatedUser, setUpdatedUser] = useState<User>(selectedUser);
 
-  // Recoil callback hook API calls
+  // Recoil callback hook for API calls
+  // - This gives us a memoized function that exposes Recoil `set` and won't be recreated
+  // - unless anything in the dependencies array (at the bottom) changes.
   const updateUser = useRecoilCallback(
     ({ set }) => async ({ user }) => {
       try {
@@ -36,7 +38,7 @@ export function UpdateUserInput() {
         return [];
       }
     },
-    []
+    [mockUpdateUser, userListStateEdit]
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,9 +52,8 @@ export function UpdateUserInput() {
     event.preventDefault();
 
     if (updatedUser?.first_name && userList) {
-      // Call the app state selector which will make a service call
-      // to update the user and splice it into the list.
-      // createUser(newUser);
+      // Call our Recoil callback hook to make a service call
+      // and update the App state with the result.
       updateUser({ user: updatedUser });
     }
 
