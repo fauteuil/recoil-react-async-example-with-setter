@@ -1,16 +1,14 @@
 import axios from "axios";
 import { User, UserApiData } from "./types";
-import {
-  createUserApiUrl,
-  getUserApiUrl,
-  userListApiUrl
-} from "./configuration";
-import { DefaultValue } from "recoil";
+import { userListApiUrl } from "./configuration";
 
+/**
+ * Service call for the `User` list
+ */
 export async function getUsers() {
   try {
     const response = await axios.get<UserApiData>(userListApiUrl);
-    // console.log("getUsers response: ", response?.data?.data);
+
     return response.data || [];
   } catch (error) {
     throw new Error(
@@ -19,30 +17,37 @@ export async function getUsers() {
   }
 }
 
-// Append our new item to the origina API get response,
-// to mimic a service which responds to a create request,
-// with an updated list.
+/**
+ * Mock service call to append a new `User` to the original `getUsers()` response.
+ * @description This mimics a service which responds to a POST request with an updated list.
+ *              We could also explicitly return the `getUsers()` response after the update.
+ * @param newUser: User
+ */
 export async function mockCreateUser(newUser: User) {
   try {
+    // API GET
     const response = await getUsers();
-    // console.log("service.createUser response: ", response?.data);
 
+    // Fake an update by appending our new User manually.
     response.data.push(newUser as User);
+
     return response.data;
   } catch (error) {
     throw new Error(
-      `Error in 'axiosGetJsonData(${userListApiUrl})': ${error.message}`
+      `Error in mockCreateUser() - 'axiosGetJsonData(${userListApiUrl})': ${error.message}`
     );
   }
 }
 
-// Update our updated item within the origina API get response,
-// to mimic a service which responds to an update request,
-// with an updated list.
+/**
+ * Mock service call to update the specified `User` from the original `getUsers()` response.
+ * @description This mimics a service which responds to a POST request with an updated list.
+ *              We could also explicitly return the `getUsers()` response after the update.
+ * @param updatedUser: User
+ */
 export async function mockUpdateUser(updatedUser: User) {
   try {
     const response = await getUsers();
-    // console.log("service.updateUser response: ", response?.data);
 
     const updatedList = response.data;
     const targetIndex = updatedList.findIndex(
@@ -52,7 +57,7 @@ export async function mockUpdateUser(updatedUser: User) {
     return updatedList;
   } catch (error) {
     throw new Error(
-      `Error in 'axiosGetJsonData(${userListApiUrl})': ${error.message}`
+      `Error in mockUpdateUser() - 'axiosGetJsonData(${userListApiUrl})': ${error.message}`
     );
   }
 }

@@ -1,16 +1,5 @@
 import { User } from "./types";
 
-/**
- * We generate a quasi-random URL to show that
- * when the service is called, changes in the results
- * will cause our Recoil app state to be synchronized.
- */
-export const getUserApiUrl = () =>
-  `https://reqres.in/api/users?page=${Math.max(
-    1,
-    Math.round(Math.random()) * 2
-  )}`;
-
 export const userListApiUrl = "https://reqres.in/api/users?page=2";
 
 export const createUserApiUrl =
@@ -23,6 +12,6 @@ export const defaultBlankUser: User = {
 };
 export const defaultNewUser: User = {
   first_name: "",
-  last_name: "oops",
+  last_name: "McLastName",
   email: "oopsie@whoops.oops"
 };

@@ -8,16 +8,6 @@ export const selectedUserState = atom<User>({
   default: defaultBlankUser
 });
 
-// const addUserInternalState = atom<User | null>({
-//   key: "addUserInternalState",
-//   default: null
-// });
-
-// export const updateUserInternalState = atom<User | null>({
-//   key: "updateUserInternalState",
-//   default: null
-// });
-
 /**
  * Populate the default selector return value with a service call.
  */

@@ -13,7 +13,6 @@ export function UserListEdit() {
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     const selectedUser = user || defaultBlankUser;
-    // console.log("handleUserClick", selectedUser);
     setSelectedUser(selectedUser);
   };
 

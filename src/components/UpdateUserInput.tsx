@@ -12,17 +12,16 @@ import { mockUpdateUser } from "../service";
 export function UpdateUserInput() {
   // Application state
   const userListLoadable = useRecoilValueLoadable(userListStateEdit);
+
+  // We're skipping Recoil loading or error state to see the content.
   const userList =
     userListLoadable.state === "hasValue" ? userListLoadable.contents : null;
   const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
 
-  // We only use the setter for updateUserState.
-  // const updateUser = useSetRecoilState(updateUserState);
-
-  // local state
+  // Local state
   const [updatedUser, setUpdatedUser] = useState<User>(selectedUser);
 
-  // recoil callback API calls
+  // Recoil callback hook API calls
   const updateUser = useRecoilCallback(
     ({ set }) => async ({ user }) => {
       try {
@@ -45,18 +44,21 @@ export function UpdateUserInput() {
     setUpdatedUser({ ...selectedUser, first_name: `${event.target.value}` });
   };
 
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleUpdateUserSubmit = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
-    // console.log("updatedUser", updatedUser);
+
     if (updatedUser?.first_name && userList) {
       // Call the app state selector which will make a service call
       // to update the user and splice it into the list.
       // createUser(newUser);
       updateUser({ user: updatedUser });
-
-      // Reset the local state newUser to be blank.
-      setUpdatedUser(defaultBlankUser);
     }
+
+    // Reset the local and Recoil states to be blank.
+    setSelectedUser(defaultBlankUser);
+    setUpdatedUser(defaultBlankUser);
   };
 
   // We want the input to show the selected user by default,
@@ -66,7 +68,7 @@ export function UpdateUserInput() {
   return (
     <div>
       <input onChange={handleInputChange} value={currentInputValue} />
-      <button onClick={handleButtonClick}>Update User</button>
+      <button onClick={handleUpdateUserSubmit}>Update User</button>
     </div>
   );
 }
